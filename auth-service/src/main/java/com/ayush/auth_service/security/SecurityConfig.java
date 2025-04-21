@@ -37,18 +37,24 @@ public class SecurityConfig {
             .sessionManagement(management -> management
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-            		// Public endpoints (no token required)
+            		// Auth (register / login) endpoints (no token required)
                     .requestMatchers(
                         "/auth/register",
-                        "/auth/login"
+                        "/auth/login",
+                        "/auth/whoami"
                     ).permitAll()
                     
-                    // Protected endpoints (require token)
                     .requestMatchers(
-                        "/auth/whoami",
-                        "/farmer/**",    // All routes under /farmer/
+                        "/farmer/**"    // All routes under /farmer/
+                    ).hasRole("FARMER")
+                    
+                    .requestMatchers(
                         "/dealer/**"     // All routes under /dealer/
-                    ).authenticated()
+                    ).hasRole("DEALER")
+                    
+                    .requestMatchers(
+                        "/admin/**"     // All routes under /admin/
+                    ).hasRole("ADMIN")
                     
                     // All other endpoints currently don't require auth
                     .anyRequest().permitAll()
