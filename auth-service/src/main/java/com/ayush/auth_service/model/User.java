@@ -40,6 +40,6 @@ public class User {
 	@Enumerated(EnumType.STRING)
 	private Role role;
 	
-//	user_id of farmer / dealer / admin
+	private Long userId;
 
 }
